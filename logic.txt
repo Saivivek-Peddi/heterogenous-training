@@ -1,0 +1,40 @@
+I am currently doing research on Heterogeneous training: A vendor agnostic approach. Let's say I have an Nvidia GPU and AMD GPU and I am trying to figure out an algorithm through which I can slice the tensors and split the computation to both AMD and Nvidia at the same time and then do a gather after the computation is done. End of the day I want to train one ML model end to end with both the GPUs at the same time. Could you help me design this.
+
+
+I am currently doing research on Heterogeneous training: A vendor agnostic approach. Let's say I have a Nvidia GPU and an AMD GPU, I want to use both the GPUs at the same time for training LLMs, making it truly hardware agnostic. 
+
+The current SOTA for training LLMs is PyTroch FSDP. At the end I want create a unified backend which can use both AMD and Nvidia GPUs at the same time. And the frontend will be PyTorch.
+
+First I need architecture for how this unified backend should look like.
+Second I want to create a POC for this. I want to simulate an Nvidia GPU, an AMD GPU and both of them should be able to comunnicate with one another, these simulation can be just an api like a CUDA call or ROCM call returning some appropriate values. Once we have these we should be able to plug this in the PyTorch and create a very simple training task that simulates the FSDP training and I want to log the metrics and everything show that this works.
+
+I need to demo this product on May 2nd. Can you help me with creating a the architecture and POC
+
+The final product will have an intelli
+
+First I need to prove that this works, for this first I need to simula
+My current idea is to simulate an Nvidia GPU and AMD GPU and
+
+I want to use PyTorch as the interface. Let's say I want to train a model, I want to plug this layer in between, hardware and PyTorch. How do I do this?
+
+How does PyTorch does it now, take an example and explain. Using PyTorch, how does it flow what steps are involved. Let's say you defined a feed forward layer. One you have written this code in python, can you explain step by step what components are involved in computing it on a GPU, like where does the CUDA kernal come into picture and what kind of kernels?  Also how do I create my intermediate layer, one idea was to use OpenCL. 
+
+
+So first, I want to understand how PyTorch FSDP works and how it uses GPUs. Like can you explain in short what FSDP is, and how it works? like once your write the PyTorch code how does the execution happen? Like whose responsibility is to assign tasks to GPUs? Is it PyTorch or Is it CUDA or RoCM can you explain clearly.
+
+
+I am currently doing research on Heterogeneous training: A vendor agnostic approach. Let's say I have a Nvidia GPU and an AMD GPU, I want to use both the GPUs at the same time for training LLMs, making it truly hardware agnostic. 
+
+I have access to GPUs on AWS. P3 and G5 instances with Nvidia and AMD GPUS.
+
+I want to do an experiment where I can use both of them to do a single training task.
+
+As a start, let's say I have 1 node on AWS with Nvidia GPU and 1 node on AWS with AMD GPU. 
+Let's say you can ssh into both of them from one another, meaning both are connected with some network.
+
+So, I want to do a small POC so that my team can take it up from there -
+Let's say there are  2 large matrices on Nivida node and 2 large matrices on AMD. 
+
+Let's say task is to use Cuda to multiply these two on Nvidia and RoCm to multiply these two on AMD and do some sort of a reduce operation on the resultant matrices and store the result in one of the nodes and most imporotantly collect the metrics. Does this make sense, I am thinking in terms of LLMs, FSDP and forward pass etc.
+
+Can you help me do this in a very orgainized and using software design principles with a long term goal of distribtued training or inference in the mind. First explain me the design and then let's create a puml for the design and then create the code in the subsequent chat.

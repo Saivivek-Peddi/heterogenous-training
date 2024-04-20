@@ -1,0 +1,29 @@
+@startuml hardware
+skinparam rectangle {
+    BackgroundColor Snow
+    BorderColor Black
+}
+
+package "Nvidia Node" {
+    [Nvidia GPU] as NvidiaGPU
+    [OpenMPI] as MPI1
+    [PyTorch with CUDA] as PyTorchCUDA
+    node "Python Script" as PythonScript1
+    NvidiaGPU <-- PyTorchCUDA : "Utilizes"
+    MPI1 <--> PythonScript1 : "Communicates"
+    PyTorchCUDA <--> PythonScript1 : "Executes"
+}
+
+package "AMD Node" {
+    [AMD GPU] as AMDGPU
+    [OpenMPI] as MPI2
+    [PyTorch with ROCm] as PyTorchROCM
+    node "Python Script" as PythonScript2
+    AMDGPU <-- PyTorchROCM : "Utilizes"
+    MPI2 <--> PythonScript2 : "Communicates"
+    PyTorchROCM <--> PythonScript2 : "Executes"
+}
+
+MPI1 <--> MPI2 : "Synchronizes\nData Exchange"
+
+@enduml

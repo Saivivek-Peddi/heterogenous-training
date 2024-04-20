@@ -1,0 +1,30 @@
+@startuml hetero
+!define Node(x) class x << (N,orchid) >>
+
+skinparam backgroundColor #EEEBDC
+skinparam class {
+    BackgroundColor Snow
+    ArrowColor Olive
+    BorderColor Gray
+}
+
+Node(Nvidia_GPU_Node)
+Node(AMD_GPU_Node)
+
+Nvidia_GPU_Node : - GPU Type: Nvidia
+Nvidia_GPU_Node : - Task: Matrix Multiplication using CUDA
+Nvidia_GPU_Node : - Command AMD Node to start task
+Nvidia_GPU_Node : - Receives result from AMD GPU Node
+Nvidia_GPU_Node : - Performs reduction operation
+Nvidia_GPU_Node : - Collects performance metrics
+Nvidia_GPU_Node : - Stores final result
+
+AMD_GPU_Node : - GPU Type: AMD
+AMD_GPU_Node : - Task: Matrix Multiplication using ROCm
+AMD_GPU_Node : - Sends result to Nvidia GPU Node
+
+Nvidia_GPU_Node --> AMD_GPU_Node : Command to start task
+AMD_GPU_Node --> Nvidia_GPU_Node : Sends matrix result
+Nvidia_GPU_Node --> Nvidia_GPU_Node : Reduction and final processing
+
+@enduml

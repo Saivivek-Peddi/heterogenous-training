@@ -1,0 +1,36 @@
+@startuml HetroHLD
+skinparam rectangle {
+  backgroundColor PaleGreen
+  borderColor DarkSlateGray
+}
+
+actor "Data Scientist\n(PyTorch User)" as User
+
+rectangle "Application Layer" {
+  component "[PyTorch Model & Training Script]" as PyTorchApp
+}
+
+rectangle "Unified Training Backend" #LightBlue {
+  node "API Abstraction Layer" {
+    component "API Translator"
+  }
+  node "Hardware Management Layer" {
+    component "Device Manager"
+  }
+  node "Communication & Synchronization Layer" {
+    component "Data Transfer Manager"
+  }
+  node "Task Scheduler"
+  node "Monitoring & Logging"
+}
+
+rectangle "GPU Hardware Layer" {
+  database "NVIDIA GPU\n(CUDA API)" as CUDA
+  database "AMD GPU\n(ROCm API)" as ROCm
+}
+
+User --> PyTorchApp : uses
+PyTorchApp --> "API Translator" : sends operations
+"API Translator" --> CUDA : interfaces with hardware
+"API Translator" --> ROCm : interfaces with hardware
+@enduml

@@ -1,0 +1,29 @@
+@startuml hetero
+actor NvidiaNode as "Nvidia GPU Node (Master)"
+actor AMDNode as "AMD GPU Node"
+
+group Initialization
+    NvidiaNode -> NvidiaNode: Receive matrix A and B
+    AMDNode -> AMDNode: Receive matrix C and D
+end
+
+group Parallel Computation
+    NvidiaNode -> NvidiaNode: Multiply matrices A and B (CUDA)
+    AMDNode -> AMDNode: Multiply matrices C and D (ROCm)
+end
+
+group Data Exchange
+    NvidiaNode -> AMDNode: Send result to AMD
+    AMDNode -> NvidiaNode: Send result to Nvidia
+end
+
+group Reduction and Aggregation
+    NvidiaNode -> NvidiaNode: Perform reduction operation
+end
+
+group Metrics Collection and Finalization
+    NvidiaNode -> NvidiaNode: Collect metrics
+    NvidiaNode -> NvidiaNode: Store final result
+end
+
+@enduml

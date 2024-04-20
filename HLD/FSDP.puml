@@ -1,0 +1,34 @@
+@startuml FSDP
+actor Trainer
+entity "FSDP Module" as FSDP
+entity "PyTorch Model" as Model
+database "GPU Memory" as GPU
+entity "CUDA/ROCm API" as CUDA
+entity "NCCL/RCCL" as NCCL
+
+Trainer -> FSDP : Initialize Model (FSDP(Model))
+FSDP -> Model : Wrap model layers
+FSDP -> GPU : Distribute model shards
+
+loop Training Loop
+    Trainer -> FSDP : Forward pass(input)
+    FSDP -> Model : Load necessary shards
+    Model -> CUDA : Execute computations
+    CUDA -> GPU : Access/Shard memory
+    GPU -> Model : Return outputs
+    Model -> FSDP : Send output to FSDP
+
+    Trainer -> FSDP : Compute loss
+    FSDP -> Model : Backward pass(grads)
+    Model -> CUDA : Calculate gradients
+    CUDA -> GPU : Store gradients
+
+    FSDP -> NCCL : Reduce gradients
+    NCCL -> GPU : Synchronize gradients across GPUs
+
+    Trainer -> FSDP : Update parameters
+    FSDP -> CUDA : Update model shards
+    CUDA -> GPU : Update in-place
+end
+
+@enduml

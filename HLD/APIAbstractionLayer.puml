@@ -1,0 +1,16 @@
+@startuml APIAbstractionLayer
+skinparam rectangle {
+  backgroundColor Wheat
+}
+
+rectangle "API Abstraction Layer" {
+  actor "PyTorch Application" as PyTorch
+  component "API Translator" as Translator
+  database "NVIDIA GPU (CUDA)" as CUDA
+  database "AMD GPU (ROCm)" as ROCm
+
+  PyTorch -> Translator : Sends generic\nGPU operations
+  Translator -> CUDA : Translates to\nCUDA commands
+  Translator -> ROCm : Translates to\nROCm commands
+}
+@enduml
